@@ -1,4 +1,7 @@
 # ROS2 Guidance
+```bash
+git clone git@github.com:GAI-313/ros2_guidance_ws.git
+```
 
 ## Linux
 ```bash
