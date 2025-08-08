@@ -1,0 +1,49 @@
+x-linux: &linux
+  volumes:
+    - /run/user/1000/pulse/native:/tmp/pulse/native
+    - ~/.config/pulse/cookie:/tmp/pulse/cookie:ro
+    - /tmp/.X11-unix:/tmp/.X11-unix
+    - $HOME/.Xauthority/:/root/.Xauthority
+    - ./src:/ws/src
+    - /dev:/dev
+  devices:
+    - /dev:/dev
+
+x-gpu: &gpu
+  deploy:
+    resources:
+      reservations:
+        devices:
+          - driver: nvidia
+            count: 1
+            capabilities: [gpu]
+
+x-network: &network
+  privileged: true
+  ipc: host
+  network_mode: host
+  tty: true
+  stdin_open: true
+
+
+services:
+  linux:
+    container_name: ros2_humble_on_linux
+    image: gai313/ros2:humble
+    <<: [*network, *linux]
+    environment:
+      - DISPLAY
+      - ROS_DOMAIN_ID
+      - RMW_IMPLEMENTATION
+    command: "/bin/bash -c terminator"
+
+
+  mac:
+    container_name: ros2_humble_on_mac
+    image: gai313/ros2:humble
+    <<: *network
+    environment:
+      - DISPLAY=host.docker.internal:0.0
+      - ROS_DOMAIN_ID
+      - RMW_IMPLEMENTATION
+    command: "/bin/bash -c terminator"
