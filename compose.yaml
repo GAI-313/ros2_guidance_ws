@@ -42,6 +42,8 @@ services:
     container_name: ros2_humble_on_mac
     image: gai313/ros2:humble
     <<: *network
+    volumes:
+      - ./src:/ws/src
     environment:
       - DISPLAY=host.docker.internal:0.0
       - ROS_DOMAIN_ID
